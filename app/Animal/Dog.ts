@@ -14,6 +14,9 @@ module Animal {
             super(name);
         }
 
+        /**
+         * 鳴き声
+         */
         public cry() {
             console.log('bowwow');
         }

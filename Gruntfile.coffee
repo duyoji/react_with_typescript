@@ -6,7 +6,10 @@ module.exports = (grunt) ->
       typescript:
         src: "app/**/*.ts"
         dest: "dest/app.ts.js"
-        dest_min: "dest/app.ts.min.js"
+      concat:
+        dest: "dest/app.js"
+      uglify:
+        dest: "dest/app.min.js"
 
     typescript:
       compile:
@@ -22,19 +25,26 @@ module.exports = (grunt) ->
           out: 'docs/'
           name: 'react_with_typescript'
         src: "<%= files.typescript.src %>"
+    concat:
+      options:
+        separator: ';'
+      dist:
+        src: ["<%= files.typescript.dest %>"],
+        dest: "<%= files.concat.dest %>"
     uglify:
       options:
         mangle: true
         compress: true
       dist:
         files:
-          "<%= files.typescript.dest_min %>": ["<%= files.typescript.dest %>"]
+          "<%= files.uglify.dest %>": ["<%= files.concat.dest %>"]
     watch:
       typescript:
         files: "<%= files.typescript.src %>"
-        tasks: ['typescript']
+        tasks: ['typescript', 'concat']
 
   # These plugins provide necessary tasks.
+  grunt.loadNpmTasks 'grunt-contrib-concat'
   grunt.loadNpmTasks 'grunt-contrib-uglify'
   grunt.loadNpmTasks 'grunt-contrib-watch'
   grunt.loadNpmTasks 'grunt-typedoc'
@@ -42,5 +52,5 @@ module.exports = (grunt) ->
 
   # Default task.
   grunt.registerTask 'default', ['watch']
-  grunt.registerTask 'build', ['typescript', 'typedoc', 'uglify']
+  grunt.registerTask 'build', ['typescript', 'typedoc', 'concat', 'uglify']
   grunt.registerTask 'doc', ['typedoc']
