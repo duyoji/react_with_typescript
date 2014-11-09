@@ -29,7 +29,13 @@ module.exports = (grunt) ->
       options:
         separator: ';'
       dist:
-        src: ["<%= files.typescript.dest %>"],
+        src: [
+          "vendor/react-0.12.0.js",
+          "vendor/JSXTransformer-0.12.0.js",
+          "vendor/jquery-1.10.0.min.js",
+          "vendor/es6-promise-2.0.0.min.js",
+          "<%= files.typescript.dest %>"
+        ]
         dest: "<%= files.concat.dest %>"
     uglify:
       options:
@@ -52,5 +58,6 @@ module.exports = (grunt) ->
 
   # Default task.
   grunt.registerTask 'default', ['watch']
+  grunt.registerTask 'generate', ['typescript', 'concat']
   grunt.registerTask 'build', ['typescript', 'typedoc', 'concat', 'uglify']
   grunt.registerTask 'doc', ['typedoc']
